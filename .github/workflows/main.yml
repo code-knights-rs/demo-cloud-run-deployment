@@ -13,11 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v0.5.0
+      - name: Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v0.5.0
         with:
           project_id: gcp-de-research
           service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Authenticate with gcloud
+        run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}
 
       - name: Copy model from storage bucket
         run: gsutil cp gs://github_demo_bucket/opus-mt-en-de/ model/
