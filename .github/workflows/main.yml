@@ -13,8 +13,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.0
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v0.5.0
         with:
           project_id: gcp-de-research
           service_account_key: ${{ secrets.GCP_SA_KEY }}
