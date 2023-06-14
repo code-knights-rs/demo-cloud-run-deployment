@@ -1,0 +1,6 @@
+Flask
+flask-mobility==1.1.0
+torch==1.13.1
+datasets==2.12.0
+transformers==4.28.1
+sentencepiece==0.1.99
