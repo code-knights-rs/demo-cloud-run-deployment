@@ -25,6 +25,12 @@ jobs:
           
       - name: 'Setup Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
+        
+      - id: 'gcloud'
+        name: 'gcloud'
+        run: |-
+          'gcloud auth login'
+        
 
       - name: Copy model from storage bucket
         run: gsutil cp gs://github_demo_bucket/opus-mt-en-de/ model/
