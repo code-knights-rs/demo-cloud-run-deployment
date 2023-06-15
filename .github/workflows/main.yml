@@ -20,14 +20,13 @@ jobs:
       - name: 'Configure workload Identity Federation via a credential file'
         uses: 'google-github-actions/auth@v1'
         with:
-          token_format: 'access_token'
           workload_identity_provider: 'projects/121494567974/locations/global/workloadIdentityPools/githuactions/attribute.repository/code-knights-rs/demo-cloud-run-deployment'
           service_account: 'github-actions@gcp-de-research.iam.gserviceaccount.com'
           
       - name: 'Setup Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
 
-      - name: Copy model from storage bucket
+      - name: 'Copy model from storage bucket'
         run: gsutil cp gs://github_demo_bucket/opus-mt-en-de/ model/
 
       - name: Build and push Docker image
