@@ -24,7 +24,7 @@ jobs:
           service_account: 'github-actions@gcp-de-research.iam.gserviceaccount.com'
           
       - name: 'Setup Cloud SDK'
-        uses: 'google-github-actoins/setup-gcloud@v1'
+        uses: 'google-github-actions/setup-gcloud@v1'
 
       - name: Copy model from storage bucket
         run: gsutil cp gs://github_demo_bucket/opus-mt-en-de/ model/
