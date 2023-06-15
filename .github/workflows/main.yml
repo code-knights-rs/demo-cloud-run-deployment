@@ -8,15 +8,23 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0.4.0'
+      - name: 'Configure workload Identity Federation via a credential file'
+        uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          workload_identity_provider: 'projects/121494567974/locations/global/workloadIdentityPools/githuactions/attribute.repository/code-knights-rs/demo-cloud-run-deployment'
+          service_account: 'github-actions@gcp-de-research.iam.gserviceaccount.com'
+          
+      - name: 'Setup Cloud SDK'
+        uses: 'google-github-actoins/setup-gcloud@v1'
 
       - name: Copy model from storage bucket
         run: gsutil cp gs://github_demo_bucket/opus-mt-en-de/ model/
