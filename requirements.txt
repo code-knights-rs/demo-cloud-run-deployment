@@ -4,3 +4,4 @@ torch==1.13.1
 datasets==2.12.0
 transformers==4.28.1
 sentencepiece==0.1.99
+gunicorn==20.1.0
