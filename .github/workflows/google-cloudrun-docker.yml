@@ -112,7 +112,7 @@ jobs:
       - name: Download Model from GCS
         run: |-
           mkdir -p ./models
-          gsutil cp gs://github_demo_bucket/opus-mt-en-de ./models/
+          gsutil -m cp -r gs://github_demo_bucket/opus-mt-en-de ./models/
 
       - name: Build and Push Container
         run: |-
