@@ -47,7 +47,7 @@ name: Build and Deploy to Cloud Run
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   PROJECT_ID: gcp-de-research # TODO: update Google Cloud project id
