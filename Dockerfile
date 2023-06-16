@@ -11,8 +11,8 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Download model from gcs
-mkdir -p ./models
-gsutil -m cp -r gs://github_demo_bucket/opus-mt-en-de ./models/
+RUN mkdir -p ./models
+RUN gsutil -m cp -r gs://github_demo_bucket/opus-mt-en-de ./models/
 
 # Copy the application code to the container
 COPY . .
