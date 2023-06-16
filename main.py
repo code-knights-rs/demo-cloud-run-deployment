@@ -9,18 +9,31 @@ Mobility(app)
 @app.route('/', methods=['GET', 'POST'])
 def index():
     result = None
-    output = ""
-    if request.method == 'POST' and  request.MOBILE:
-        text = request.form['text']        # Process the form data
-        result = inference(text=text)
-        output = render_template('mobile_template.html', result=result)
+    template = 'desktop_template.html'
+    default_value = ""
+    try:
+        if request.method == 'POST' and request.MOBILE:
+            template = 'mobile_template.html'
+            text = request.form['text']  # Process the form data
+            # result = ryu.ryu(english_sentence=text)
+            result = inference(text=text)
 
-    if request.method == 'POST' and not request.MOBILE:
-        text = request.form['text']  # Process the form data
-        result = inference(text=text)
-        output = render_template('desktop_template.html', result=result)
+        elif request.method == 'POST' and not request.MOBILE:
+            template = 'desktop_template.html'
+            text = request.form['text']  # Process the form data
+            # result = ryu.ryu(english_sentence=text)
+            if text:
+                result = inference(text=text)
+                print(text, result)
+            text_res = request.form.get('input_text')
+            # print(text_res)
+            if text_res:
+                print(text_res)
 
-    return output
+        return render_template(template, default_value=default_value, result=result)
+
+    except Exception as error:
+        return f"Error Encountered as: {error}"
 
 
 def inference(text):
