@@ -4,16 +4,6 @@ FROM python:3.8-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Install gsutil
-RUN apt-get update && apt-get install -y curl gnupg
-RUN echo "deb http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-RUN apt-get update && apt-get install -y google-cloud-sdk
-
-# Download model from gcs
-RUN mkdir -p ./models
-RUN gsutil -m cp -r gs://github_demo_bucket/opus-mt-en-de ./models/
-
 # Copy the requirements file to the container
 COPY . .
 
