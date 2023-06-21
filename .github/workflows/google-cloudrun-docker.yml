@@ -109,10 +109,10 @@ jobs:
           version: 'latest'
 
 
-      - name: Download Model from GCS
-        run: |-
-          mkdir -p ./models
-          gsutil -m cp -r gs://github_demo_bucket/opus-mt-en-de ./models/
+#       - name: Download Model from GCS
+#         run: |-
+#           mkdir -p ./models
+#           gsutil -m cp -r gs://github_demo_bucket/opus-mt-en-de ./models/
 
 #       - name: Build and Push Container
 #         run: |-
