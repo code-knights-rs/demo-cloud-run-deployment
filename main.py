@@ -2,44 +2,35 @@ from flask import Flask, render_template, request, session
 from transformers import MarianMTModel, MarianTokenizer
 import pandas as pd
 import os
+from google.cloud.sql.connector import Connector
 import sqlalchemy
-import psycopg2
+
+
 # Hydrate the environment from the .env file
 from dotenv import load_dotenv
 load_dotenv()
 
-
 app = Flask(__name__)
 app.secret_key = 'flask_secret_key'
 
+connector = Connector()
 
-def init_db_connection():
-    db_config = {
-        'pool_size': 5,
-        'max_overflow': 2,
-        'pool_timeout': 10,
-        'pool_recycle': 1800,
-    }
-    return init_unix_connection_engine(db_config)
-
-
-def init_unix_connection_engine(db_config):
-    pool = sqlalchemy.create_engine(
-        sqlalchemy.engine.url.URL(
-            drivername="postgres+pg8000",
-            host=os.environ.get('DB_HOST'),
-            # port=os.environ.get('DB_PORT'),
-            username=os.environ.get('DB_USER'),
-            password=os.environ.get('DB_PASS'),
-            database=os.environ.get('DB_NAME'),
-        ),
-        **db_config
+# configure Cloud SQL Python Connector properties
+def getconn():
+    conn = connector.connect(
+        "gcp-de-research:us-central1:kubernetes-db-poc-user",
+        "pg8000",
+        user="postgres",
+        password="kubernetes-password",
+        db="postgres"
     )
-    pool.dialect.description_encoding = None
-    return pool
+    return conn
 
-
-db = init_db_connection()
+# create connection pool to re-use connections
+pool = sqlalchemy.create_engine(
+    "postgresql+pg8000://",
+    creator=getconn,
+)
 
 
 @app.route('/')
@@ -84,15 +75,21 @@ def translate_function():
     df = pd.DataFrame(data)
     print(df)
 
-    # insert statement (DML statement for data load)
-    insert_stmt = sqlalchemy.text(
-        "INSERT INTO demo_dataset (Input_text, Processed_text, Corrected_text, Ratings) VALUES (:Input_text, :Processed_text, :Corrected_text, :Ratings)",
-    )
+    with pool.connect() as db_conn:
+        # create ratings table in our sandwiches database
 
-    # interact with Cloud SQL database using connection pool
-    with db.connect() as conn:
-        # Insert data into Table
-        conn.execute(insert_stmt).fetchone()
+        # insert data into our ratings table
+        insert_stmt = sqlalchemy.text(
+            "INSERT INTO demo_dataset (Input_text, Processed_text, Corrected_text, Ratings) VALUES (:Input_text, :Processed_text, :Corrected_text, :Ratings)",
+        )
+
+        # insert entries into table
+        db_conn.execute(insert_stmt, parameters={"Input_text": "row1", "Processed_text": "row2",
+                                                 "Corrected_text": "row3", "Ratings": row4})
+
+        # commit transactions
+        db_conn.commit()
+
 
     return render_template('index.html', result=corrected_text)
 
