@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Language Translation API Page</title>
-    <!-- Desktop-specific CSS styles -->
+    <title>Language Translation API Page - Result</title>
     <style>
         body {
             background-color: #f2f2f2;
@@ -53,30 +51,36 @@
             border-radius: 4px;
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myForm').submit(function(e) {
+                e.preventDefault();  // Prevent form submission
+
+                var inputTextValue2 = $('#myInput2').val();
+                $.post('/translate', {text1: inputTextValue2}, function(data) {
+                    $('body').html(data);
+                // var inputTextValue2 = $('#myInput2').val();
+
+                // $.post('/next', {text1: inputTextValue1, text2: inputTextValue2}, function(data) {
+                //     $('body').html(data);
+                });
+            });
+        });
+    </script>
 </head>
 <body>
-    <div>
-        <h1>Welcome to Language Translation API (Desktop View)!</h1>
-        <p>This is the desktop version of the app.</p>
+    <form id="myForm">
+    <h2>Result:</h2>
+        <label for="results">Input Text:</label>
+        <input type="text" value="{{ result }}" id="results" readonly>
 
-        <form method="POST" action="/">
-            <label for="text">Enter text for conversion:</label>
-            <input type="text" name="text" id="text">
-            <input type="submit" value="Submit text">
+        <label for="myInput2">Enter Correct Text:</label>
+        <input type="text" id="myInput2">
 
+        <input type="submit" value="Submit text">
 
-        {% if result %}
-            <h2>Result:</h2>
-            <input type="text" value="{{ result }}" readonly>
-            <label for="text1">Enter Correct Text:</label>
-            <input type="text" name="Enter correct text" id="text1">
-            <input type="submit" value="Submit correct text">
-        {% endif %}
-         </form>
-
-    </div>
-
-
+    </form>
 
 </body>
 </html>

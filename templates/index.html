@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Language Translation API Page</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#myForm').submit(function(e) {
+                e.preventDefault();  // Prevent form submission
+
+                var inputTextValue1 = $('#myInput1').val();
+                $.post('/next', {text1: inputTextValue1}, function(data) {
+                    $('body').html(data);
+                // var inputTextValue2 = $('#myInput2').val();
+
+                // $.post('/next', {text1: inputTextValue1, text2: inputTextValue2}, function(data) {
+                //     $('body').html(data);
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="myForm">
+        <label for="myInput1">Input Text:</label>
+        <input type="text" id="myInput1">
+
+<!--        <label for="myInput2">Enter Correct Text:</label>-->
+<!--        <input type="text" id="myInput2">-->
+
+        <input type="submit" value="Submit text">
+    </form>
+</body>
+</html>
