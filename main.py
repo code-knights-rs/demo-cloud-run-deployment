@@ -5,7 +5,6 @@ import os
 from google.cloud.sql.connector import Connector
 import sqlalchemy
 
-
 # Hydrate the environment from the .env file
 from dotenv import load_dotenv
 load_dotenv()
@@ -18,13 +17,14 @@ connector = Connector()
 # configure Cloud SQL Python Connector properties
 def getconn():
     conn = connector.connect(
-        "gcp-de-research:us-central1:kubernetes-db-poc-user",
+        os.environ["INSTANCE_NAME"],
         "pg8000",
-        user="postgres",
-        password="kubernetes-password",
-        db="postgres"
+        user=os.environ["DB_USER"],
+        password=os.environ["DB_PASSWORD"],
+        db=os.environ["DB_NAME"]
     )
     return conn
+
 
 
 @app.route('/')
@@ -82,12 +82,14 @@ def translate_function():
         )
 
         # insert entries into table
-        db_conn.execute(insert_stmt, parameters={"Input_text": "row1", "Processed_text": "row2",
-                                                 "Corrected_text": "row3", "Ratings": row4})
+        db_conn.execute(insert_stmt, parameters={"Input_text": row1, "Processed_text": row2,
+                                                 "Corrected_text": row3, "Ratings": row4})
+
+        # db_conn.execute(insert_stmt, parameters={"Input_text": "Hello World", "Processed_text": "hi-gaku",
+        #                                          "Corrected_text": "hi-gaku", "Ratings": 1})
 
         # commit transactions
         db_conn.commit()
-
 
     return render_template('index.html', result=corrected_text)
 
