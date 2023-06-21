@@ -26,12 +26,6 @@ def getconn():
     )
     return conn
 
-# create connection pool to re-use connections
-pool = sqlalchemy.create_engine(
-    "postgresql+pg8000://",
-    creator=getconn,
-)
-
 
 @app.route('/')
 def home():
@@ -74,7 +68,11 @@ def translate_function():
     }
     df = pd.DataFrame(data)
     print(df)
-
+    # create connection pool to re-use connections
+    pool = sqlalchemy.create_engine(
+        "postgresql+pg8000://",
+        creator=getconn,
+    )
     with pool.connect() as db_conn:
         # create ratings table in our sandwiches database
 
