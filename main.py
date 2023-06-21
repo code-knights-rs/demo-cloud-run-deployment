@@ -17,7 +17,7 @@ def init_db_connection():
     db_config = {
         'pool_size': 5,
         'max_overflow': 2,
-        'pool_timeout': 30,
+        'pool_timeout': 10,
         'pool_recycle': 1800,
     }
     return init_unix_connection_engine(db_config)
@@ -28,7 +28,7 @@ def init_unix_connection_engine(db_config):
         sqlalchemy.engine.url.URL(
             drivername="postgres+pg8000",
             host=os.environ.get('DB_HOST'),
-            port=os.environ.get('DB_PORT'),
+            # port=os.environ.get('DB_PORT'),
             username=os.environ.get('DB_USER'),
             password=os.environ.get('DB_PASS'),
             database=os.environ.get('DB_NAME'),
